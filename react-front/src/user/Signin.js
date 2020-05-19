@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
+import { signin, authenticate } from '../auth'
 
 class Signin extends Component {
     constructor() {
@@ -16,13 +17,6 @@ class Signin extends Component {
     handleChange = (name) => (event) => {
         this.setState({ error: "" })
         this.setState({ [name]: event.target.value })
-    }
-
-    authenticate = (jwt, next) => {
-        if (typeof window !== "undefined") {
-            localStorage.setItem("jwt", JSON.stringify(jwt))
-            next()
-        }
     }
 
     clickSubmit = (event) => {
@@ -75,19 +69,6 @@ class Signin extends Component {
             </button>
         </form>
     )
-
-    signin = user => {
-        return fetch(`${process.env.REACT_APP_API_URL}/signin`, {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            }, 
-            body: JSON.stringify(user)
-        })
-        .then(res => res.json())
-        .catch(err => console.log(err))
-    }
 
     render() {
         if (this.state.redirectToReferer) {

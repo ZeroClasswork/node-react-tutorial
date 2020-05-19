@@ -1,5 +1,6 @@
 import React from 'react'
-import { Link, withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom"
+import { isAuthenticated, signout } from '../auth'
 
 const isActive = (history, path) => {
     if (history.location.pathname === path) {
@@ -43,36 +44,75 @@ const Menu = ({history}) => (
                 Home
             </Link>
         </li>
-        <li 
-            className="nav-item"
-            style={{
-                display: "flex",
-                flex: 1
-            }}
-        >
-            <Link 
-                style={isActive(history, "/signin")}
-                className="nav-link" 
-                to="/signin"
+        {!isAuthenticated() && (
+            <>
+            <li 
+                className="nav-item"
+                style={{
+                    display: "flex",
+                    flex: 1
+                }}
             >
-                Sign In
-            </Link>
-        </li>
-        <li 
-            className="nav-item"
-            style={{
-                display: "flex",
-                flex: 1
-            }}
-        >
-            <Link 
-                style={isActive(history, "/signup")}
-                className="nav-link" 
-                to="/signup"
+                <Link 
+                    style={isActive(history, "/signin")}
+                    className="nav-link" 
+                    to="/signin"
+                >
+                    Sign In
+                </Link>
+            </li>
+            <li 
+                className="nav-item"
+                style={{
+                    display: "flex",
+                    flex: 1
+                }}
             >
-                Sign Up
-            </Link>
-        </li>
+                <Link 
+                    style={isActive(history, "/signup")}
+                    className="nav-link" 
+                    to="/signup"
+                >
+                    Sign Up
+                </Link>
+            </li>
+            </>
+        )}
+        {isAuthenticated() &&
+            <>
+                <li 
+                    className="nav-item"
+                    style={{
+                        display: "flex",
+                        flex: 1
+                    }}
+                >
+                    <Link 
+                        style={isActive(history, "/signup")}
+                        className="nav-link" 
+                        onClick={() => {
+                            signout(() => history.push('/'))
+                        }}
+                    >
+                        Sign Out
+                    </Link>
+                </li>
+                <li 
+                    className="nav-item"
+                    style={{
+                        display: "flex",
+                        flex: 1
+                    }}
+                >
+                    <Link 
+                        style={isActive(history, "/signup")}
+                        className="nav-link" 
+                    >
+                        {isAuthenticated().user.name}
+                    </Link>
+                </li>
+            </>
+        }
     </ul>
 )
 
